@@ -1,0 +1,21 @@
+school-system (Group G06) - corrections v3
+===========================================
+Fixes for the problems found when the code was tested against the report:
+
+1. Duplicate fee accounts (fees/FeesService.openAccount): a student can now have only one
+   fee account; a second one is refused ("... already has fee account G06-F001").
+2. Removing linked records (students/StudentService, staff/StaffService):
+   a student who still has a fee account, mark, library loan, bed allocation or club
+   membership cannot be removed, and a staff member who is a club patron cannot be removed.
+   Each module registers its own check with preventRemovalWhile(...).
+   students/StudentMenu now catches RuntimeException so the refusal is shown as "Error: ...".
+3. NaN / Infinity (fees/FeeAccount, fees/Payment, marks/Mark, staff/Staff): constructors and
+   setters now reject NaN and Infinity, not only negative values.
+4. Rejected updates change nothing (StudentService.update, StaffService.update): every new
+   value is validated on a throw-away copy first, then applied.
+5. Failed saves are reported (core/FileStore.saveAll): a failed save now throws an error
+   that the menus print as "Error: Could not save ..." instead of only printing a line.
+
+New: tests/ProjectTests.java and tests/run_tests.bat - runs the 40-case test plan from the
+report plus 10 further checks and writes tests/TEST_LOG.txt. It works in an empty temporary
+folder, so the school's data folder is never touched.

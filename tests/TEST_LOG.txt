@@ -1,0 +1,167 @@
+G06 TEST LOG - 2026-10-08T11:45:36
+Java 27 | working folder C:\Users\ObunjiGroup\Documents\Codex\2026-10-03\have\outputs\G06_Complete_Final\school-system\tests\_test_runs\run_15306_12352\work
+================================================================
+PART 1 - THE 40-CASE TEST PLAN (report Section 5)
+================================================================
+[PASS] CORE-01  Main menu: type the letter x
+         expected: Rejected, menu asks again, no crash
+         actual  : Choose:   That is not a whole number. Try again. | [exit code 0]
+[PASS] CORE-02  new Student("X001", ...) - ID without the group prefix
+         expected: IllegalArgumentException from Record
+         actual  : IllegalArgumentException: Record ID must start with G06- (got: X001)
+[PASS] CORE-03  Add a bad line to students.txt and restart
+         expected: Line skipped with a message; the three good students still load
+         actual  : message shown; 3 students loaded
+[PASS] CORE-04  Delete data/marks.txt and restart
+         expected: Program starts normally with an empty marks list
+         actual  : No marks after restart
+[PASS] CORE-05  Main menu: type 9 (outside 0-7)
+         expected: Rejected, menu asks again
+         actual  : Choose:   Enter a number between 0 and 7. | [exit code 0]
+[PASS] CORE-06  Damaged line in allocations.txt and memberships.txt, restart
+         expected: Both lines skipped with a message; all other records load
+         actual  : both skipped; allocations loaded=1, memberships loaded=1
+[PASS] CORE-07  Close the input (end of input) at the main menu
+         expected: Program ends with a message, no crash
+         actual  : Input closed. Last saved data retained. Goodbye. | [exit code 0]
+[PASS] CORE-08  Add student named "Evil|Name"
+         expected: Refused, because | would split the saved record
+         actual  : IllegalArgumentException: Student name cannot contain | or line breaks
+[PASS] STU-01  Add student Nakato Grace, year 2, stream A
+         expected: Student created with the next ID
+         actual  : Added: G06-S001  Nakato Grace  S2A
+[PASS] STU-02  Year input: abc, then 9, then 3 (invalid input)
+         expected: Both bad values rejected; 3 accepted
+         actual  : both rejected; Value:   That is not a whole number. Try again. / Value:   Enter a number between 1 and 6. / Value: RESULT=3 | [exit code 0]
+[PASS] STU-03  Find student G06-S999 (does not exist)
+         expected: StudentNotFoundException shown as an error
+         actual  : StudentNotFoundException: No student found with ID: G06-S999
+[PASS] STU-04  Remove a student who has a fee account
+         expected: Removal refused; nothing lost after restart
+         actual  : Error: Cannot remove Nakato Grace: still linked to a fee account. Remove that record first. | students after restart: 1
+[PASS] FEE-01  Payment amount -5
+         expected: InputHelper rejects negative and asks again
+         actual  : Amount:   Enter a finite, non-negative amount. / Amount: RESULT=300.0 | [exit code 0]
+[PASS] FEE-02  Record payment with amount 0
+         expected: InsufficientPaymentException
+         actual  : InsufficientPaymentException: Payment amount must be positive
+[PASS] FEE-03  CR-01: add billing of 200,000 to an account billed 850,000 with 300,000 paid
+         expected: Billed 1,050,000; owes 750,000
+         actual  : billed 1050000 owes 750000
+[PASS] FEE-04  Payment amount NaN, then Infinity
+         expected: Both refused by InputHelper
+         actual  : 2 refusals; Amount: RESULT=500.0 | [exit code 0]
+[PASS] FEE-05  Record payment of 200 by "Cheque"
+         expected: Refused; balance unchanged
+         actual  : Error: Payment method must be Cash, MoMo or Bank | balance 850000
+[PASS] FEE-06  Open a second fee account for the same student
+         expected: Refused
+         actual  : IllegalArgumentException: Nakato Grace already has fee account G06-F001
+[PASS] MRK-01  Record Mathematics 78
+         expected: Mark saved with grade B
+         actual  : Recorded: G06-M001  Nakato Grace  Mathematics  78.0 (B)
+[PASS] MRK-02  Record Physics 150 (out of range)
+         expected: InvalidMarkException
+         actual  : InvalidMarkException: Score must be between 0 and 100 (got 150.0)
+[PASS] MRK-03  Report card, Term 3, marks 78 and 88
+         expected: Card with each mark; average 83.0
+         actual  : 2 subjects, avg 83.0 | G06-R001  Nakato Grace  Term 3  avg 83.0
+[PASS] LIB-01  Add book "Fountain Physics for S3", 2 copies
+         expected: Book created, 2/2 free
+         actual  : Added: G06-B001 Fountain Physics for S3 (2/2 free)
+[PASS] LIB-02  Borrow a book that has no free copy
+         expected: BookNotAvailableException
+         actual  : BookNotAvailableException: No copies of 'Longhorn English' available
+[PASS] LIB-03  Report low-stock books, threshold 0
+         expected: Only the book with 0 copies free is listed
+         actual  : listed: 1 (Longhorn English)
+[PASS] STF-01  Add Mugisha Robert, Teacher, 900,000
+         expected: Staff created
+         actual  : Added: G06-T001  Mugisha Robert  (Teacher)
+[PASS] STF-02  Add the same name and role again
+         expected: DuplicateStaffException
+         actual  : DuplicateStaffException: Already registered: Mugisha Robert / Teacher
+[PASS] STF-03  Mark attendance present for the staff member
+         expected: Attendance record for today
+         actual  : G06-A001  Mugisha Robert  2026-10-08  PRESENT
+[PASS] STF-04  Remove a staff member who is patron of a club
+         expected: Removal refused
+         actual  : Error: Cannot remove Mugisha Robert: still linked to a club (as patron). Remove that record first.
+[PASS] BRD-01  Beds: 0 then 2 (invalid input), then add dormitory
+         expected: 0 rejected and asked again; dormitory created with 2 beds
+         actual  : 0 rejected; Added: G06-D001 Kizito Dorm 2/2 beds free
+[PASS] BRD-02  Allocate with term "term three"
+         expected: Refused: term must look like Term 3 2026
+         actual  : IllegalArgumentException: Term must look like 'Term 3 2026'
+[PASS] BRD-03  Allocate a second student to a 1-bed dormitory
+         expected: DormitoryFullException
+         actual  : DormitoryFullException: Dormitory Nile Dorm is full (1 beds)
+[PASS] BRD-04  Allocate the same student again
+         expected: Refused: one active bed per student
+         actual  : IllegalStateException: Nakato Grace already has a bed in Nile Dorm (G06-H001)
+[PASS] BRD-05  Remove a dormitory while a bed is taken
+         expected: Removal refused
+         actual  : Error: Cannot remove Nile Dorm: 1 bed(s) still taken
+[PASS] BRD-06  Report: dormitories by free beds
+         expected: Most free beds first
+         actual  : Kizito Dorm, Nile Dorm
+[PASS] CLB-01  Add club with patron G06-T999 (no such staff member)
+         expected: Refused
+         actual  : NoSuchElementException: No staff with ID: G06-T999
+[PASS] CLB-02  Add Debate Club, patron G06-T001, maximum 2
+         expected: Club created
+         actual  : Added: G06-C001 Debate Club (patron Mugisha Robert) 0/2 members
+[PASS] CLB-03  Join with position "Captain"
+         expected: Refused
+         actual  : IllegalArgumentException: Position must be Member, Secretary, Chairperson or Treasurer
+[PASS] CLB-04  A third student joins a club with 2 of 2 places taken
+         expected: ClubFullException
+         actual  : ClubFullException: Club Debate Club is full (2 members)
+[PASS] CLB-05  Remove a club while it has a member
+         expected: Removal refused
+         actual  : Error: Cannot remove Chess Club: 1 active member(s)
+[PASS] CLB-06  Restart the program and list clubs
+         expected: Clubs reload with member counts rebuilt
+         actual  : G06-C001 Debate Club 2/2 members
+
+PART 1 RESULT: 40 passed, 0 failed (40 cases)
+
+================================================================
+PART 2 - FURTHER CHECKS (constructor-level, atomic update, save failure, robustness)
+================================================================
+[PASS] X-01  FeeAccount constructor rejects NaN
+         expected: IllegalArgumentException
+         actual  : IllegalArgumentException: Billed amount must be a finite number, not negative
+[PASS] X-02  Mark rejects NaN
+         expected: InvalidMarkException
+         actual  : InvalidMarkException: Score must be between 0 and 100 (got NaN)
+[PASS] X-03  Payment and addBilling reject NaN
+         expected: Both refused
+         actual  : both refused
+[PASS] X-04  Staff salary NaN is rejected
+         expected: IllegalArgumentException
+         actual  : IllegalArgumentException: Salary must be a finite number, not negative
+[PASS] X-05  Rejected student update (valid name, invalid year) changes nothing
+         expected: Name unchanged
+         actual  : name unchanged
+[PASS] X-06  Rejected staff update (valid name, negative salary) changes nothing
+         expected: Name unchanged
+         actual  : name unchanged
+[PASS] X-07  Student linked to a mark, a loan, a bed or a club cannot be removed
+         expected: All four refused
+         actual  : 4 of 4 refused
+[PASS] X-08  A failed save is reported instead of being ignored
+         expected: Error shown, not silent
+         actual  : Error: Could not save students.txt: data\students.txt (the change is in memory only - check the data folder) | [exit code 0]
+[PASS] X-09  300 lines of random invalid input typed into the menus
+         expected: No crash, no stack trace
+         actual  : NO STACK TRACE
+[PASS] X-10  Every data file damaged 4 ways (garbage, truncated, empty, binary): start-up never crashes
+         expected: All 7 services start each time
+         actual  : ALL STARTS OK: 48 of 48 (12 files x 4 damage types)
+
+================================================================
+TOTAL: 50 passed, 0 failed
+  Part 1 (40-case plan): 40 passed, 0 failed
+  Part 2 (further checks): 10 passed, 0 failed
+================================================================

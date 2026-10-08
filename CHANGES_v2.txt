@@ -1,0 +1,17 @@
+school-system (Group G06) - corrections applied 7 October 2026
+==============================================================
+1. core/Validation.java (new): shared text check. Text fields can no longer
+   contain '|' or line breaks, which previously corrupted the pipe-separated
+   data files and silently lost the record at the next start-up.
+   Used by: Record, Student, Mark, ReportCard, Book, Staff, Dormitory, Club.
+2. core/InputHelper.java: if the input stream is closed (Ctrl+Z / Ctrl+D)
+   the program now ends with a message instead of a NoSuchElementException.
+   readMoney() now rejects NaN and Infinity as well as negative amounts.
+3. fees/Payment.java: payment method restricted to Cash, MoMo or Bank, as
+   stated in requirement FEE-02 of the report.
+4. fees/FeesService.recordPayment(): the Payment is validated before the
+   account balance is changed, and the payment ID is only reserved on
+   success. A rejected payment no longer debits the account or skips an ID.
+5. data/ folder removed: it contained real names and a phone number, which
+   the coursework brief forbids. The program recreates it with invented data.
+6. out/ folder of compiled classes removed; run.bat recompiles from src/.
